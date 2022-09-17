@@ -12,10 +12,10 @@ public static Connection getConnection() {
     Connection connection = null;
     try {
         connection = DriverManager.getConnection(HOST,USERNAME,PASSWORD);
-        //System.out.println("Connection OK");
+        System.out.println("Connection OK");
     } catch (SQLException e) {
         e.printStackTrace();
-        //System.out.println("Connection ERROR");
+        System.out.println("Connection ERROR");
     }
     return connection;
 }
