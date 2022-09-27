@@ -18,13 +18,17 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
+        Transaction transaction = null;
         try (Session session = Util.getConnection().openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.createSQLQuery("CREATE TABLE IF NOT EXISTS Users " +
                     "(ID INT PRIMARY KEY AUTO_INCREMENT,name VARCHAR (40), " +
                     "lastname VARCHAR(40), age INT (3))").executeUpdate();
             transaction.commit();
         } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
         }
         System.out.println("Таблица создана");
@@ -32,11 +36,15 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
+        Transaction transaction = null;
         try (Session session = Util.getConnection().openSession()){
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.createSQLQuery("DROP TABLE IF EXISTS Users").executeUpdate();
             transaction.commit();
         } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
         }
         System.out.println("Таблица удалена");
